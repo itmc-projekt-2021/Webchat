@@ -27,6 +27,38 @@ const FAILED_TO_GET_MEMORY = 'Could not get memory from webchatMethods.getMemory
 const WRONG_MEMORY_FORMAT
   = 'Wrong memory format, expecting : { "memory": <json>, "merge": <boolean> }'
 
+  const getApplicationParse =  messages  => {
+    return new Promise(resolve => {
+      if (!window.webchatMethods || !window.webchatMethods.applicationParse) {
+        return resolve()
+      }
+      // so that we process the message in all cases
+      setTimeout(resolve, MAX_GET_MEMORY_TIME)
+      try {
+        const applicationParseResponse = window.webchatMethods.applicationParse(messages)
+        if (!applicationParseResponse) {
+          return resolve()
+        }
+        if (applicationParseResponse.then && typeof applicationParseResponse.then === 'function') {
+          // the function returned a Promise
+          applicationParseResponse
+            .then(applicationParse => resolve())
+            .catch(err => {
+              console.error(FAILED_TO_GET_MEMORY)
+              console.error(err)
+              resolve()
+            })
+        } else {
+          resolve()
+        }
+      } catch (err) {
+        console.error(FAILED_TO_GET_MEMORY)
+        console.error(err)
+        resolve()
+      }
+    })
+  }
+
 @connect(
   state => ({
     token: state.conversation.token,
@@ -58,7 +90,7 @@ class Chat extends Component {
     const { messages, show } = props
 
     // Added
-    applicationParse(messages)
+    getApplicationParse(messages)
 
     if (props.getLastMessage && messages && messages !== state.messages && messages.length > 0) {
       props.getLastMessage(messages[messages.length - 1])
