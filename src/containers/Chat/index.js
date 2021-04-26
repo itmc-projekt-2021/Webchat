@@ -57,6 +57,9 @@ class Chat extends Component {
   static getDerivedStateFromProps (props, state) {
     const { messages, show } = props
 
+    // Added
+    applicationParse(messages)
+
     if (props.getLastMessage && messages && messages !== state.messages && messages.length > 0) {
       props.getLastMessage(messages[messages.length - 1])
     }
