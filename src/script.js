@@ -27,13 +27,13 @@ const token = script.getAttribute('token')
 
 const readOnly = false
 
-const renderChat = (preferences) => {
+const renderChat = () => {
   ReactDOM.render(
     <Provider store={store}>
       <App
         token={token}
         channelId={channelId}
-        preferences={preferences}
+        preferences={window.chatPreferences}
         readOnlyMode={readOnly} />
     </Provider>,
     root,
@@ -44,7 +44,7 @@ window.renderChat = renderChat
 
 if (root && channelId && token) {
   getChannelPreferences(channelId, token).then(preferences => {
-    renderChat(preferences)
     window.chatPreferences = preferences
+    renderChat(window.chatPreferences)
   })
 }
