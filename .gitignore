@@ -6,3 +6,5 @@ lib
 .idea/
 lib
 .vercel
+coverage
+.nyc_output
