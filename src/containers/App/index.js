@@ -28,6 +28,7 @@ class App extends Component {
   state = {
     expanded: this.props.expanded || false,
     isReady: null,
+    preferences: this.props.preferences
   }
   static getDerivedStateFromProps (props, state) {
     const { isReady, preferences } = props
@@ -55,9 +56,9 @@ class App extends Component {
       default:
         break
       }
-      return { expanded, isReady }
+      return { expanded, isReady, preferences }
     }
-    return { isReady }
+    return { isReady, preferences }
   }
 
   componentDidMount () {
@@ -90,8 +91,10 @@ class App extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const { onToggle, conversationHistoryId } = this.props
+    const { onToggle, conversationHistoryId, preferences } = this.props
 
+    console.log(preferences, prevState.preferences)
+    
     if (prevState.expanded !== this.state.expanded) {
       if (window.localStorage) {
         localStorage.setItem('isChatOpen', this.state.expanded)
