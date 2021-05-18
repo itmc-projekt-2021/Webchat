@@ -486,6 +486,8 @@ class Chat extends Component {
     } = this.props
     const { showSlogan, messages, inputHeight } = this.state
 
+    window.webchatMethods.sendMessage = this.sendMessage
+
     return (
       <div
         className={cx('RecastAppChat CaiAppChat', { open: show, close: !show })}
