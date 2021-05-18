@@ -92,7 +92,7 @@ class App extends Component {
 
   componentDidUpdate (prevProps, prevState) {
     const { onToggle, conversationHistoryId } = this.props
-    
+
     if (prevState.expanded !== this.state.expanded) {
       if (window.localStorage) {
         localStorage.setItem('isChatOpen', this.state.expanded)
