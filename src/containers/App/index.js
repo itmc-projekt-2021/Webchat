@@ -91,9 +91,7 @@ class App extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const { onToggle, conversationHistoryId, preferences } = this.props
-
-    console.log(preferences, prevState.preferences)
+    const { onToggle, conversationHistoryId } = this.props
     
     if (prevState.expanded !== this.state.expanded) {
       if (window.localStorage) {

@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 import propOr from 'ramda/es/propOr'
 import concat from 'ramda/es/concat'
-import equals from 'ramda/es/equals'
 import { storeCredentialsToLocalStorage } from 'helpers'
 import { createConversation, removeConversationId } from 'actions/conversation'
+import { getApplicationParse } from 'actions/bridge' // Added May 2021
 
 import {
   postMessage,
@@ -28,31 +28,6 @@ const FAILED_TO_GET_MEMORY = 'Could not get memory from webchatMethods.getMemory
 const WRONG_MEMORY_FORMAT
   = 'Wrong memory format, expecting : { "memory": <json>, "merge": <boolean> }'
 const MAX_NUMBER_WITHOUT_MESSAGES_BEFORE_WAITING = 6
-
-const getApplicationParse = (messages, callback) => {
-  if (!window.webchatMethods || !window.webchatMethods.applicationParse) {
-    return null
-  }
-
-  try {
-    const applicationParseResponse = window.webchatMethods.applicationParse(messages)
-    if (!applicationParseResponse) {
-      return null
-    }
-    if (applicationParseResponse.then && typeof applicationParseResponse.then === 'function') {
-      // the function returned a Promise
-      return applicationParseResponse
-        .then(messages => callback(messages))
-        .catch(err => {
-          console.error(FAILED_TO_GET_MEMORY)
-          console.error(err)
-        })
-    }
-  } catch (err) {
-    console.error(FAILED_TO_GET_MEMORY)
-    console.error(err)
-  }
-}
 
 @connect(
   state => ({
@@ -84,10 +59,8 @@ class Chat extends Component {
   static getDerivedStateFromProps (props, state) {
     const { messages, show } = props
 
-    // Added
-    getApplicationParse(messages, (parsedMessages) => {
-      this.setState({ messages: parsedMessages })
-    })
+    // Added May 2021. Call getApplicationParse with messages array, set updated state on callback
+    getApplicationParse(messages, (messages) => this.setState({ messages }))
 
     if (props.getLastMessage && messages && messages !== state.messages && messages.length > 0) {
       props.getLastMessage(messages[messages.length - 1])

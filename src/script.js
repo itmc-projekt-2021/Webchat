@@ -43,7 +43,6 @@ window.renderChat = (preferences) => {
 
 if (root && channelId && token) {
   getChannelPreferences(channelId, token).then(preferences => {
-    window.webchatPreferences = preferences
     renderChat(preferences)
   })
 }
