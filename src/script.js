@@ -27,6 +27,8 @@ const token = script.getAttribute('token')
 
 const readOnly = false
 
+// Added May 2021. Moved rendering of chat inside dedicated function (window.renderChat) to 
+// enable dynamic overwrite of preferences (via window.webchatPreferences)
 window.renderChat = (preferences) => {
   window.webchatPreferences = preferences
   ReactDOM.render(

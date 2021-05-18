@@ -28,7 +28,7 @@ class App extends Component {
   state = {
     expanded: this.props.expanded || false,
     isReady: null,
-    preferences: this.props.preferences
+    preferences: this.props.preferences // Added May 2021. Copy preferences into state as well.
   }
   static getDerivedStateFromProps (props, state) {
     const { isReady, preferences } = props
@@ -56,9 +56,9 @@ class App extends Component {
       default:
         break
       }
-      return { expanded, isReady, preferences }
+      return { expanded, isReady, preferences } // Added May 2021. Return preferences as state
     }
-    return { isReady, preferences }
+    return { isReady, preferences } // Added May 2021. Return preferences as state
   }
 
   componentDidMount () {
