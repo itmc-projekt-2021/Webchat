@@ -62,7 +62,7 @@ class Chat extends Component {
     // Added May 2021. Call getApplicationParse with messages array, update state if callback is called
     getApplicationParse(messages, updatedMessages => {
       this.setState( { messages: updatedMessages })
-    })
+    }).bind(this)
 
     if (props.getLastMessage && messages && messages !== state.messages && messages.length > 0) {
       props.getLastMessage(messages[messages.length - 1])
