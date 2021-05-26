@@ -6,7 +6,6 @@ import propOr from 'ramda/es/propOr'
 import concat from 'ramda/es/concat'
 import { storeCredentialsToLocalStorage } from 'helpers'
 import { createConversation, removeConversationId } from 'actions/conversation'
-import { getApplicationParse } from 'actions/bridge' // Added May 2021
 
 import {
   postMessage,
@@ -56,13 +55,26 @@ class Chat extends Component {
     inputHeight: 50, // height of input (default: 50px)
   }
 
+  // Added May 2021. Update state if callback is called
+  updateMessages (updatedMessages) {
+    this.setState( { messages: updatedMessages })
+  }
+  // Added May 2021. END
+
   static getDerivedStateFromProps (props, state) {
     const { messages, show } = props
 
     // Added May 2021. Call getApplicationParse with messages array, update state if callback is called
-    getApplicationParse(messages, updatedMessages => {
-      this.setState( { messages: updatedMessages })
-    }).bind(this)
+    try {
+      const applicationParseResponse = window.webchatMethods.applicationParse(messages)
+      if (applicationParseResponse.then && typeof applicationParseResponse.then === 'function') {
+        applicationParseResponse.then()
+          .catch(console.error)
+      }
+    } catch (err) {
+        console.error(err)
+    }
+    // Added May 2021. END
 
     if (props.getLastMessage && messages && messages !== state.messages && messages.length > 0) {
       props.getLastMessage(messages[messages.length - 1])
@@ -89,6 +101,10 @@ class Chat extends Component {
     if (loadConversationHistoryPromise && conversationHistoryId && show) {
       loadConversationHistoryPromise(conversationHistoryId).then(this.loadConversation)
     }
+
+    // Added May 2021. applicationParseCallback can be used to update messages.
+    window.applicationParseCallback = this.updateMessages.bind(this)
+    // Added May 2021. END
   }
 
   componentDidUpdate (prevProps) {
