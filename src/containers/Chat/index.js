@@ -64,7 +64,7 @@ class Chat extends Component {
   static getDerivedStateFromProps (props, state) {
     const { messages, show } = props
 
-    // Added May 2021. Call getApplicationParse with messages array, update state if callback is called
+    // Added May 2021. Call getApplicationParse with messages array
     try {
       const applicationParseResponse = window.webchatMethods.applicationParse(messages)
       if (applicationParseResponse.then && typeof applicationParseResponse.then === 'function') {
@@ -502,7 +502,7 @@ class Chat extends Component {
     } = this.props
     const { showSlogan, messages, inputHeight } = this.state
 
-    window.webchatMethods.sendMessage = this.sendMessage
+    window.webchatMethods.sendMessage = this.sendMessage // Added May 2021. export sendMessage globally
 
     return (
       <div
