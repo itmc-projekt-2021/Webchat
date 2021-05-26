@@ -55,11 +55,7 @@ class Chat extends Component {
     inputHeight: 50, // height of input (default: 50px)
   }
 
-  // Added May 2021. Update state if callback is called
-  updateMessages (updatedMessages) {
-    this.setState( { messages: updatedMessages })
-  }
-  // Added May 2021. END
+  updateMessages (updatedMessages) { this.setState( { messages: updatedMessages }) } // Added May 2021. Update state if callback is called
 
   static getDerivedStateFromProps (props, state) {
     const { messages, show } = props
@@ -73,8 +69,8 @@ class Chat extends Component {
       }
     } catch (err) {
         console.error(err)
-    }
-    // Added May 2021. END
+    } // Added May 2021. END
+    
 
     if (props.getLastMessage && messages && messages !== state.messages && messages.length > 0) {
       props.getLastMessage(messages[messages.length - 1])
@@ -102,9 +98,7 @@ class Chat extends Component {
       loadConversationHistoryPromise(conversationHistoryId).then(this.loadConversation)
     }
 
-    // Added May 2021. applicationParseCallback can be used to update messages.
-    window.applicationParseCallback = this.updateMessages.bind(this)
-    // Added May 2021. END
+    window.applicationParseCallback = this.updateMessages.bind(this) // Added May 2021. applicationParseCallback can be used to update messages.
   }
 
   componentDidUpdate (prevProps) {
