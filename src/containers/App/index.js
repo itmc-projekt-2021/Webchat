@@ -88,6 +88,7 @@ class App extends Component {
     }
 
     this.props.setCredentials(payload)
+    window.webchatMethods.toggleChat = this.toggleChat.bind(this) // Added May 2021. toggleChat can be used to open the chat.
   }
 
   componentDidUpdate (prevProps, prevState) {
